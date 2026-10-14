@@ -1,0 +1,514 @@
+{
+ "slug": "glossary-term-audit",
+ "module": "glossary-term-audit/src/audit",
+ "function": "audit",
+ "cases": [
+  {
+   "name": "Approved literal has no finding",
+   "args": [
+    "pump",
+    "pompe",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "error": null
+   }
+  },
+  {
+   "name": "Missing approved term in paragraph one",
+   "args": [
+    "pump",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Forbidden term in target paragraph",
+   "args": [
+    "pump",
+    "pompe pompa",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "forbidden",
+      "term": "pompa",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Whole term excludes pumping",
+   "args": [
+    "pumping",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Ignore case matches Pump",
+   "args": [
+    "Pump",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Fenced source code does not require a term",
+   "args": [
+    "```\npump\n```\n\nA note.",
+    "Une note.",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "sourceBlocks": 1
+   }
+  },
+  {
+   "name": "Unequal prose counts stop the report",
+   "args": [
+    "pump\n\npump",
+    "pompe",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "error": "Alignment stopped: source has 2 prose blocks; target has 1. Check paragraph pairs before you run again."
+   }
+  },
+  {
+   "name": "Quoted comma remains inside a term",
+   "args": [
+    "fuel, pump",
+    "moteur",
+    "source,approved,forbidden\n\"fuel, pump\",\"pompe, carburant\",pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe, carburant",
+      "sourceTerm": "fuel, pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Second paragraph retains navigation lines",
+   "args": [
+    "# Source\n\nA note.\n\npump",
+    "# Target\n\nUne note.\n\nmoteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 2,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 4,
+      "targetLine": 4
+     }
+    ]
+   }
+  },
+  {
+   "name": "Empty source is skipped with CSV row number",
+   "args": [
+    "pump",
+    "pompe",
+    "source,approved,forbidden\n,pompe,pompa\npump,pompe,pompa"
+   ],
+   "expected": {
+    "skippedRows": [
+     2
+    ],
+    "findings": []
+   }
+  },
+  {
+   "name": "Substring mode can match pumping",
+   "args": [
+    "pumping",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa",
+    {
+     "wholeTerm": false,
+     "ignoreCase": true
+    }
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Case sensitive mode excludes Pump",
+   "args": [
+    "Pump",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa",
+    {
+     "wholeTerm": true,
+     "ignoreCase": false
+    }
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Approved target comparison ignores case",
+   "args": [
+    "pump",
+    "POMPE",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Target case sensitive approved check",
+   "args": [
+    "pump",
+    "POMPE",
+    "source,approved,forbidden\npump,pompe,pompa",
+    {
+     "wholeTerm": true,
+     "ignoreCase": false
+    }
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Forbidden term needs no source match",
+   "args": [
+    "valve",
+    "pompa",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "forbidden",
+      "term": "pompa",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Missing and forbidden can coexist",
+   "args": [
+    "pump",
+    "pompa",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     },
+     {
+      "paragraph": 1,
+      "kind": "forbidden",
+      "term": "pompa",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Forbidden substring is excluded in whole mode",
+   "args": [
+    "valve",
+    "pompastic",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Unicode letters keep word boundaries",
+   "args": [
+    "épump",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Punctuation permits literal term match",
+   "args": [
+    "(pump).",
+    "pompe",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Inline code excluded from source text",
+   "args": [
+    "Use `pump` here.",
+    "Utilisez moteur ici.",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Front matter excluded",
+   "args": [
+    "# Source\n\npump",
+    "---\nlabel: pompa\n---\n# Target\n\npompe",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Indented code excluded",
+   "args": [
+    "    pump\n\nA note.",
+    "Une note.",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "CSV UTF8 BOM and CRLF accepted",
+   "args": [
+    "pump",
+    "pompe",
+    "﻿source,approved,forbidden\r\npump,pompe,pompa\r\n"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Escaped quote retained",
+   "args": [
+    "the \"pump\"",
+    "moteur",
+    "source,approved,forbidden\n\"the \"\"pump\"\"\",pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "the \"pump\"",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Invalid headers stop audit",
+   "args": [
+    "pump",
+    "pompe",
+    "source,target,bad\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "error": "Use CSV headers source,approved,forbidden in this order."
+   }
+  },
+  {
+   "name": "Unclosed CSV quote stops audit",
+   "args": [
+    "pump",
+    "pompe",
+    "source,approved,forbidden\n\"pump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "error": "CSV row 2: unclosed quote."
+   }
+  },
+  {
+   "name": "Empty approved term row skipped",
+   "args": [
+    "pump",
+    "pompe",
+    "source,approved,forbidden\nvalve,,bad\npump,pompe,pompa"
+   ],
+   "expected": {
+    "skippedRows": [
+     2
+    ],
+    "findings": []
+   }
+  },
+  {
+   "name": "No prose gives no compliance report",
+   "args": [
+    "```\npump\n```",
+    "```\npompe\n```",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [],
+    "error": "No prose blocks to check."
+   }
+  },
+  {
+   "name": "Multiple source occurrences give one finding per row",
+   "args": [
+    "pump pump pump",
+    "moteur",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 2,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Tilde fence excluded",
+   "args": [
+    "~~~js\npump\n~~~\n\nA note.",
+    "Une note.",
+    "source,approved,forbidden\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": []
+   }
+  },
+  {
+   "name": "Wrong CSV column count skipped",
+   "args": [
+    "pump",
+    "pompe",
+    "source,approved,forbidden\nvalve,soupape,bad,extra\npump,pompe,pompa"
+   ],
+   "expected": {
+    "skippedRows": [
+     2
+    ]
+   }
+  },
+  {
+   "name": "Blank CSV row preserves physical row number",
+   "args": [
+    "pump",
+    "moteur",
+    "source,approved,forbidden\n\npump,pompe,pompa"
+   ],
+   "expected": {
+    "findings": [
+     {
+      "paragraph": 1,
+      "kind": "missing",
+      "term": "pompe",
+      "sourceTerm": "pump",
+      "row": 3,
+      "sourceLine": 0,
+      "targetLine": 0
+     }
+    ]
+   }
+  }
+ ]
+}

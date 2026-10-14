@@ -1,0 +1,69 @@
+[
+  {
+    "feature": "choose-notes",
+    "caption": "Choose a source and target note for a local terminology check.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0];  return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'"
+  },
+  {
+    "feature": "load-glossary",
+    "caption": "The glossary keeps literal terms and reports a skipped source row.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; m.csv.value='source,approved,forbidden\\n,pompe,pompa\\npump,pompe,pompa'; m.target.value='Glossary Term Audit/Approved.md'; m.render([await p.checkPair(m.source.value,m.target.value,m.csv.value)]); m.modalEl.scrollTop=m.output.offsetTop-60;  return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'"
+  },
+  {
+    "feature": "approved-terms",
+    "caption": "The approved translation has three paired blocks and no glossary findings.",
+    "note": "Approved.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; m.target.value='Glossary Term Audit/Approved.md'; m.render([await p.checkPair(m.source.value,m.target.value,m.csv.value)]); m.modalEl.scrollTop=m.output.offsetTop-60;  return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'"
+  },
+  {
+    "feature": "paragraph-results",
+    "caption": "Paragraph two has a missing approved term and a forbidden target term.",
+    "note": "Target.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; m.render([await p.checkPair(m.source.value,m.target.value,m.csv.value)]); m.modalEl.scrollTop=m.output.offsetTop-60;  return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'"
+  },
+  {
+    "feature": "open-result",
+    "caption": "The target note opens at the affected second prose block.",
+    "note": "Target.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); await p.openResult('Glossary Term Audit/Target.md',4); return 'ok';})()"
+  },
+  {
+    "feature": "folder-check",
+    "caption": "Pro checks two declared translation pairs within one folder.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; p.pro.opts.http=async()=>({status:200,json:{data:{viewer:{login:'demo-reader'},user:{sponsorshipForViewerAsSponsor:{isActive:true,isOneTimePayment:false,tier:{name:'$5 a month',monthlyPriceInCents:500}}}}}}); app.secretStorage.setSecret('glossary-term-audit-github-token','gho_'+'0'.repeat(36)); await p.pro.refreshNow(); m.render(await p.checkFolder('Glossary Term Audit','source,target\\nSource.md,Target.md\\nSource.md,Approved.md',m.csv.value)); m.modalEl.scrollTop=m.output.offsetTop-60; return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'; app.plugins.plugins['glossary-term-audit'].pro.signOut(); 'ok'"
+  },
+  {
+    "feature": "client-profiles",
+    "caption": "Pro keeps separate client glossary profiles in local plugin data.",
+    "note": "Source.md",
+    "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; p.pro.opts.http=async()=>({status:200,json:{data:{viewer:{login:'demo-reader'},user:{sponsorshipForViewerAsSponsor:{isActive:true,isOneTimePayment:false,tier:{name:'$5 a month',monthlyPriceInCents:500}}}}}}); app.secretStorage.setSecret('glossary-term-audit-github-token','gho_'+'0'.repeat(36)); await p.pro.refreshNow(); await p.saveProfile('Aster technical',m.csv.value); await p.saveProfile('Beacon maintenance','source,approved,forbidden\\npump,pompe,pompa\\nvalve,soupape,valvula'); m.updatePro(); m.modalEl.scrollTop=m.proArea.offsetTop-60; return 'ok';})()",
+    "after": "for(const m of [...app.plugins.plugins['glossary-term-audit'].modals])m.close(); 'ok'; app.plugins.plugins['glossary-term-audit'].pro.signOut(); 'ok'"
+  },
+  {
+    "feature": "glossary-term-audit",
+    "caption": "Check the translation and open paragraph two in the target note.",
+    "frames": [
+      {
+        "note": "Source.md",
+        "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0];  return 'ok';})()",
+        "hold": 1000
+      },
+      {
+        "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); p.settings.source='Glossary Term Audit/Source.md'; p.settings.target='Glossary Term Audit/Target.md'; p.settings.csv=\"source,approved,forbidden\\npump,pompe,pompa\\nseal,joint,garniture\\nvalve,vanne,valvula\\n\"; p.openAudit(); const m=[...p.modals][0]; m.render([await p.checkPair(m.source.value,m.target.value,m.csv.value)]); m.modalEl.scrollTop=m.output.offsetTop-60;  return 'ok';})()",
+        "hold": 1500
+      },
+      {
+        "eval": "(async()=>{const p=app.plugins.plugins['glossary-term-audit']; for(const m of [...p.modals])m.close(); await p.openResult('Glossary Term Audit/Target.md',4); return 'ok';})()",
+        "hold": 1500
+      }
+    ]
+  }
+]

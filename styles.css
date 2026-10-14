@@ -1,0 +1,47 @@
+.gta-modal { width: min(860px, 94vw); }
+
+.gta-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	flex: 1;
+	margin-bottom: 12px;
+}
+.gta-field input, .gta-field textarea { width: 100%; }
+
+.gta-note-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.gta-csv, .gta-pro textarea { font-family: var(--font-monospace); }
+.gta-hint, .gta-intro { color: var(--text-muted); }
+
+.gta-report {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 14px;
+	margin-top: 14px;
+}
+.gta-pair-title, .gta-summary { font-weight: 600; }
+
+.gta-finding {
+	border-left: 3px solid var(--interactive-accent);
+	padding: 12px;
+	margin-top: 10px;
+	background: var(--background-secondary);
+}
+.gta-finding button { margin-right: 8px; }
+.gta-error { color: var(--text-error); }
+.gta-warning { color: var(--text-warning); }
+
+.gta-pro {
+	border-top: 1px solid var(--background-modifier-border);
+	margin-top: 20px;
+	padding-top: 12px;
+}
+
+.gta-upload {
+	display: block;
+	margin-bottom: 8px;
+}
