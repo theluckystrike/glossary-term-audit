@@ -2,7 +2,7 @@
 
 Check translated paragraph pairs against approved and forbidden glossary terms. Choose a source note, choose its translation, and load the glossary that applies to that job. The result identifies the paragraph and the literal term for review.
 
-The single pair workflow is free. It includes CSV loading, matching options, paragraph results, and links to the affected notes. Pro adds folder checks of declared pairs and named client glossary profiles. The plugin does not translate text or change the notes. A result is a review aid; it is not a certificate that a translation is correct.
+The single pair workflow is free. Pro adds folder checks of declared pairs and named client glossary profiles. The plugin does not translate text or change the notes. A result is a review aid; it is not a certificate that a translation is correct.
 
 ## Features
 
@@ -60,21 +60,23 @@ Open the command palette and select Glossary Term Audit: Check a translated note
 
 For example, a glossary row can use `pump` as the source, `pompe` as approved, and `pompa` as forbidden. Source text containing pump paired with target text containing pompe produces no finding for that row. Target text containing moteur produces a missing pompe finding. Target text containing pompa produces a forbidden finding.
 
-Select Check pair, read the skipped-row warnings, and resolve alignment errors first. Inspect the findings in the notes. Reopen the command and rerun after changes. A successful report with zero findings means the configured literal checks found no issue in the selected prose blocks. It does not measure fluency, grammar, accuracy, or consistency outside those forms.
+Select Check pair, read the skipped-row warnings, and resolve alignment errors first. Inspect the findings in the notes. A successful report with zero findings means the configured literal checks found no issue in the selected prose blocks. It does not measure fluency, grammar, accuracy, or consistency outside those forms.
 
 ## Settings
 
+After a minor or major update, this plugin opens one What's new tab in the background. The tab and settings card suggest other NoteMods plugins and Zovo Chat and link to notemods.com for feedback ([privacy](https://notemods.com/privacy/)). The tab sends no data. Turn the tab off in Settings.
+
 Whole terms is enabled by default. It treats adjacent Unicode letters, combining marks, numbers, and `_` characters as part of a word, so pump does not match pumping. Turn it off to permit substring matches. Ignore case is also enabled by default. Turn it off when capitalization is part of a client's terminology rule. These two options apply to source, approved, and forbidden terms. A line break or a run of spaces counts as one space. Composed and decomposed accents match.
 
-The Pro account controls are in the same settings tab. The audit window has the note fields, current CSV, and Pro workflow controls. It has no automatic schedule. Start a check when you need it.
+The Pro account controls are in the same settings tab. The audit window has no automatic schedule.
 
 ## FAQ
 
-Does equal paragraph count prove alignment? No. A translator can reorder or split content differently. Compare the source and target block order. A term in the wrong part of a paragraph can pass the literal check.
+Does equal paragraph count prove alignment? No. A translator can reorder or split content differently. A term in the wrong part of a paragraph can pass the literal check.
 
 Does it find inflections? It compares surface forms. Add separate rows for forms that need separate checks. It does not use stemming, dictionaries, fuzzy matching, or a translation service.
 
-Which formats are outside the prose check? Rich text documents, PDFs, and rendered HTML are outside this workflow. Markdown table rows without an outer pipe and complex nested structures are not parsed as structured documents. Use ordinary prose notes for this check.
+Which formats are outside the prose check? Rich text documents, PDFs, and rendered HTML are outside this workflow. Markdown table rows without an outer pipe and complex nested structures are not parsed as structured documents.
 
 What was not tested? Physical mobile devices, Linux and Windows desktop interaction, CI with Node 24, very large vaults, third-party themes, live GitHub sign in, and a real payment were not tested for this release. The automated desktop checks use local fixtures and a simulated sponsorship response. Browser and public Obsidian APIs are used in the runtime code, but this is not a mobile compatibility claim.
 

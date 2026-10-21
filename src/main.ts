@@ -5,6 +5,8 @@ import { SPONSORS, bindPro, isPro, resetPro } from './pro';
 import { DEFAULT_SETTINGS, GlossaryTermAuditSettingTab, normalizeSettings, type GlossaryTermAuditSettings } from './settings';
 import { audit, declaredPairs, loadGlossary, type AuditReport } from './audit';
 import { AuditModal } from './modal';
+import { setupHello } from './hello/index';
+import WHATS_NEW from './whats-new.json';
 export interface PairReport {
     source: string;
     target: string;
@@ -15,6 +17,8 @@ export default class GlossaryTermAuditPlugin extends Plugin {
     pro: SponsorsManager | null = null;
     readonly modals = new Set<AuditModal>();
     async onload(): Promise<void> {
+      // First: "What's new" reads its state before the settings load (packages/hello). It does not wait.
+      setupHello(this, WHATS_NEW);
         await this.loadSettings();
         const pro = createGitHubSponsors(this.app, this.manifest.id, SPONSORS, this);
         pro.init();

@@ -2,6 +2,7 @@ import { PluginSettingTab, type SettingDefinitionItem } from 'obsidian';
 import { sponsorsSettingItems } from './license/github-obsidian';
 import { PRO_UI } from './pro';
 import type GlossaryTermAuditPlugin from './main';
+import { helloSettingItems } from './hello/settings';
 export interface GlossaryTermAuditSettings {
     wholeTerm: boolean;
     ignoreCase: boolean;
@@ -23,6 +24,11 @@ export function normalizeSettings(value: unknown): GlossaryTermAuditSettings {
 export class GlossaryTermAuditSettingTab extends PluginSettingTab {
     constructor(app: ConstructorParameters<typeof PluginSettingTab>[0], readonly auditPlugin: GlossaryTermAuditPlugin) { super(app, auditPlugin); }
     getSettingDefinitions(): SettingDefinitionItem[] {
+    	// The product rows, then the "More from NoteMods" card (packages/hello).
+    	return [...this.productSettingDefinitions(), ...helloSettingItems()];
+    }
+
+    productSettingDefinitions(): SettingDefinitionItem[] {
         return [
             { name: 'Whole terms', desc: 'Require a letter, number or underscore boundary around a term.', control: { type: 'toggle', key: 'wholeTerm', defaultValue: true } },
             { name: 'Ignore case', desc: 'Compare lower case surface forms.', control: { type: 'toggle', key: 'ignoreCase', defaultValue: true } },
