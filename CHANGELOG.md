@@ -1,5 +1,11 @@
 # glossary-term-audit
 
+## 1.1.1
+
+### Patch Changes
+
+- ad1931e: The audit window now shows Check folder, Save profile and Load profile without Pro. They show how to get Pro, with a Sponsor on GitHub button, and run nothing.
+
 ## 1.1.0
 
 ### Minor Changes

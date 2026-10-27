@@ -46,7 +46,7 @@ Enter one vault folder path and a second CSV with headers `source,target`. Decla
 
 <img src="https://raw.githubusercontent.com/theluckystrike/glossary-term-audit/HEAD/docs/client-profiles.png" alt="A saved client glossary profile ready to load" width="720">
 
-Enter a profile name and select Save profile to store the current glossary. Saving the same name replaces that profile. Choose a saved name and select Load profile to put its CSV into the text area. Profiles contain the name and glossary text; note paths and matching options are not part of a profile. Profile data stays in the plugin data file. The current single glossary remains available to the free pair check when Pro is off.
+Enter a profile name and select Save profile to store the current glossary. Choose a saved name and select Load profile to put its CSV into the text area. Profiles hold the name and glossary text, not note paths or matching options. Profile data stays in the plugin data file. The current single glossary remains available to the free pair check when Pro is off. Without Pro, the Pro buttons show a Sponsor notice and run nothing.
 
 <img src="https://raw.githubusercontent.com/theluckystrike/glossary-term-audit/HEAD/docs/glossary-term-audit.gif" alt="Check a pair and open the target paragraph" width="720">
 

@@ -1,7 +1,7 @@
 import { FuzzySuggestModal, Modal, type TFile } from 'obsidian';
 import type GlossaryTermAuditPlugin from './main';
 import type { PairReport } from './main';
-import { isPro } from './pro';
+import { FOLDER_LEAD, isPro, PROFILES_LEAD, proNotice, proText } from './pro';
 class NotePicker extends FuzzySuggestModal<TFile> {
     constructor(readonly plugin: GlossaryTermAuditPlugin, readonly choose: (file: TFile) => void) { super(plugin.app); }
     getItems(): TFile[] { return this.plugin.app.vault.getFiles().filter(f => f.extension === 'md'); }
@@ -90,10 +90,9 @@ export class AuditModal extends Modal {
         this.proArea.empty();
         const root = this.proArea;
         root.createEl('h3', { text: 'Folder checks' }).createSpan({ text: ' (Pro)' });
-        if (!isPro()) {
-            root.createEl('p', { text: 'Pro adds folder checks of declared note pairs and separate client glossary profiles. Sponsor $5 a month or $15 once. Open plugin settings to sign in with GitHub.' });
-            return;
-        }
+        // A free user sees the Pro controls. The fields hold only local text. Each Pro button shows the Pro notice and runs nothing.
+        if (!isPro())
+            root.createEl('p', { text: proText('Pro adds folder checks of declared note pairs and separate client glossary profiles.') });
         const folderLabel = root.createEl('label', { text: 'Folder path', cls: 'gta-field' });
         const folder = folderLabel.createEl('input', { type: 'text' });
         folder.placeholder = 'Translations';
@@ -101,16 +100,16 @@ export class AuditModal extends Modal {
         const pairs = pairsLabel.createEl('textarea');
         pairs.rows = 3;
         pairs.value = 'source,target\nSource.md,Target.md';
-        this.button(root, 'Check folder (Pro)', async () => { this.output.empty(); this.render(await this.plugin.checkFolder(folder.value, pairs.value, this.csv.value)); }, 'gta-folder-check');
+        this.button(root, 'Check folder (Pro)', async () => { if (!isPro()) { proNotice(FOLDER_LEAD); return; } this.output.empty(); this.render(await this.plugin.checkFolder(folder.value, pairs.value, this.csv.value)); }, 'gta-folder-check');
         root.createEl('h3', { text: 'Client glossary profiles' }).createSpan({ text: ' (Pro)' });
         const nameLabel = root.createEl('label', { text: 'Profile name', cls: 'gta-field' });
         const name = nameLabel.createEl('input', { type: 'text' });
-        this.button(root, 'Save profile (Pro)', async () => { await this.plugin.saveProfile(name.value, this.csv.value); this.updatePro(); });
+        this.button(root, 'Save profile (Pro)', async () => { if (!isPro()) { proNotice(PROFILES_LEAD); return; } await this.plugin.saveProfile(name.value, this.csv.value); this.updatePro(); });
         const select = root.createEl('select', { cls: 'gta-profiles' });
         select.setAttribute('aria-label', 'Client glossary profile');
         for (const p of this.plugin.settings.profiles)
             select.createEl('option', { text: p.name, value: p.name });
-        this.button(root, 'Load profile (Pro)', async () => { this.csv.value = this.plugin.loadProfile(select.value); });
+        this.button(root, 'Load profile (Pro)', async () => { if (!isPro()) { proNotice(PROFILES_LEAD); return; } this.csv.value = this.plugin.loadProfile(select.value); });
     }
     onClose(): void { this.plugin.modals.delete(this); this.contentEl.empty(); }
 }
