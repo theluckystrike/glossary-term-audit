@@ -68,7 +68,7 @@ After a minor or major update, this plugin opens one What's new tab in the backg
 
 Whole terms is enabled by default. It treats adjacent Unicode letters, combining marks, numbers, and `_` characters as part of a word, so pump does not match pumping. Turn it off to permit substring matches. Ignore case is also enabled by default. Turn it off when capitalization is part of a client's terminology rule. These two options apply to source, approved, and forbidden terms. A line break or a run of spaces counts as one space. Composed and decomposed accents match.
 
-The Pro account controls are in the same settings tab. The audit window has no automatic schedule.
+The Pro account controls are in the settings tab. The audit window has no automatic schedule.
 
 ## FAQ
 
@@ -83,6 +83,8 @@ What was not tested? Physical mobile devices, Linux and Windows desktop interact
 ## Payment, account and network
 
 The core features are free. Pro features need a GitHub Sponsors sponsorship of theluckystrike: $5 a month or more, or $15 once. A total payment of $15 meets the payment requirement for Pro without further payment. Sign-in and the checks below still apply. Your notes stay readable and editable with or without Pro.
+
+[One payment turns on Pro in every NoteMods plugin](https://notemods.com/pro/).
 
 GitHub handles the payment. Sponsor at https://github.com/sponsors/theluckystrike?frequency=one-time&metadata_source=glossary-term-audit. You need no account for the free features. Pro needs the GitHub account that sponsors.
 
