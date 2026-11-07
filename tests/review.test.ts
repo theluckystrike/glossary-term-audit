@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { audit, containsTerm, loadGlossary, proseBlocks } from '../src/audit';
+import { GROWTH_LIMIT, growth } from './growth';
 const on = { wholeTerm: true, ignoreCase: true };
 describe('Review regressions', () => {
     it('finds a multiword term across a hard line wrap', () => {
@@ -19,9 +20,13 @@ describe('Review regressions', () => {
     });
     it('checks a large block in linear time', () => {
         const text = 'other '.repeat(200000);
-        const t0 = Date.now();
         expect(containsTerm(text, 'the', on)).toBe(false);
-        expect(Date.now() - t0).toBeLessThan(1000);
+        // Growth guard (s1101): 200,000 words against 20,000 words, timed in this test.
+        const g = growth((n) => {
+            const t = 'other '.repeat(n);
+            return () => containsTerm(t, 'the', on);
+        }, 200000);
+        expect(g.ratio, g.text).toBeLessThan(GROWTH_LIMIT);
     });
     it('keeps block lines for navigation', () => {
         expect(proseBlocks('a\nb\n\nc')).toEqual([{ text: 'a\nb', line: 0 }, { text: 'c', line: 3 }]);

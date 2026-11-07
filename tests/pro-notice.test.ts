@@ -8,7 +8,7 @@ import manifest from '../manifest.json';
 
 // A free user sees the Pro controls of the audit window. Check folder, Save profile and Load profile show the shared
 // Pro notice with the "Sponsor on GitHub" button. No folder check runs, no profile is saved or loaded.
-const PITCH = 'Sponsor on GitHub, then sign in from the plugin settings.';
+const PITCH = 'One payment turns on Pro in every NoteMods plugin. Sponsor on GitHub, then sign in from the plugin settings.';
 const FOLDER = 'Folder checks need Pro. The single pair check is free.';
 const PROFILES = 'Client glossary profiles need Pro.';
 const csv = 'source,approved,forbidden\npump,pompe,pompa';

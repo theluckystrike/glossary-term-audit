@@ -1,9 +1,9 @@
 {
 	"id": "glossary-term-audit",
 	"name": "Glossary Term Audit",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"changes": [
-		"The audit window now shows Check folder, Save profile and Load profile without Pro. They show how to get Pro, with a Sponsor on GitHub button, and run nothing."
+		"The Pro notice of Glossary Term Audit now says that one payment turns on Pro in every NoteMods plugin."
 	],
 	"tip": "Use Open source or Open target below a finding to open that note at the affected paragraph.",
 	"thanks": "Hi, I am Michael, a solo developer in Poland. Glossary Term Audit is one of over 100 small plugins that I make. Thank you for using it to check your translations.",
